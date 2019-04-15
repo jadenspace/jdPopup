@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>jdPopup.js</title>
+    <link rel="stylesheet" href="./css/jdPopup.css">
+    <style>
+        html,body{margin:0;padding:0;}
+        button{background-color:transparent;border:1px solid #000;font-size:1em;line-height:1.5;}
+        .layout{overflow:hidden;position:relative;top:0;width:100%;height:1000px;}
+        .dimmed{transition:all .5s;}
+        .layer-pop{width:100%;max-width:800px;height:100vw;max-height:800px;transition:all .5s;}
+        .layer-pop .layer-pop-inner{padding:30px;box-sizing:border-box;background-color:#fafafa;transform:translateY(50%);transition:all .5s;}
+        .layer-pop.on .layer-pop-inner{transform:translateY(0);}
+        .layer-pop .btn-close{position:absolute;top:10px;right:10px;width:30px;height:30px;margin:0;padding:0;border:0;font-size:0;color:transparent;}
+        .layer-pop .btn-close:before,
+        .layer-pop .btn-close:after{content:'';position:absolute;right:0;width:100%;height:1px;background-color:#000;transform-origin:50% 50%;}
+        .layer-pop .btn-close:before{transform:rotate(-45deg);}
+        .layer-pop .btn-close:after{transform:rotate(45deg);}
+    </style>
+</head>
+<body>
+<div class="layout">
+    <ul>
+        <li>
+            <p>기본 레이어팝업</p>
+            <button type="button" class="btn-layer-pop" data-layer-id="layer0">레이어팝업 열기</button>
+        </li>
+        <li>
+            <p>같은 속성의 레이어팝업</p>
+            <button type="button" class="btn-layer-pop" data-layer-id="layer1">레이어팝업1 열기</button>
+            <button type="button" class="btn-layer-pop" data-layer-id="layer2">레이어팝업2 열기</button>
+            <button type="button" class="btn-layer-pop" data-layer-id="layer3">레이어팝업3 열기</button>
+        </li>
+        <li>
+            <p>부모 레이어팝업</p>
+            <button type="button" class="btn-layer-pop" data-layer-id="layer4">레이어팝업4 열기</button>
+        </li>
+    </ul>
+
+    <div class="dimmed"></div>
+    <div id="layer0" class="layer-pop">
+        <div class="layer-pop-inner">
+            <h2>기본 레이어팝업</h2>
+            <button type="button" class="btn-close">닫기</button>
+        </div>
+    </div>
+    <div id="layer1" class="layer-pop type1">
+        <div class="layer-pop-inner">
+            <h2>레이어팝업1</h2>
+            <button type="button" class="btn-close">닫기</button>
+        </div>
+    </div>
+    <div id="layer2" class="layer-pop type1">
+        <div class="layer-pop-inner">
+            <h2>레이어팝업2</h2>
+            <button type="button" class="btn-close">닫기</button>
+        </div>
+    </div>
+    <div id="layer3" class="layer-pop type1">
+        <div class="layer-pop-inner">
+            <h2>레이어팝업3</h2>
+            <button type="button" class="btn-close">닫기</button>
+        </div>
+    </div>
+    <div id="layer4" class="layer-pop">
+        <div class="layer-pop-inner">
+            <h2>부모 레이어팝업</h2>
+            <p>부모 레이어팝업니다.<br>레이어팝업5를 누를 시 레이어팝업4는 닫으면서 dimmed는 그대로 유지합니다.</p>
+            <button type="button" class="btn-close">닫기</button>
+            <button type="button" class="btn-layer-pop" data-layer-id="layer5">레이어팝업5 열기</button>
+        </div>
+    </div>
+    <div id="layer5" class="layer-pop">
+        <div class="layer-pop-inner">
+            <h2>자식 레이어팝업</h2>
+            <p>자식 레이어팝업입니다.<br>닫기를 누를 시 dimmed가 제거 되도록 설정하였습니다.</p>
+            <button type="button" class="btn-close">닫기</button>
+        </div>
+    </div>
+</div>
+
+<script src="./js/jdPopup.js"></script>
+<script>
+    // 일반적인 레이어팝업
+    var layerDefault = new JdPopup('#layer0', {
+        isDimmed: true,
+        isFixed: true
+    });
+    // 같은 속성의 레이어팝업들 설정하기
+    var layers = [];
+    for (var i = 0; i < document.querySelectorAll('.layer-pop.type1').length; i++) {
+        layers[i] = new JdPopup('#layer' + (i + 1), {
+            isDimmed: true,
+            isFixed: false,
+            turningPoint: 768,
+            responsive: {
+                isFixed: true
+            }
+        });
+    }
+    // 커스텀 예제 : 부모,자식 레이어팝업 제어
+    // 자동 dimmed 설정을 해제하고, 콜백함수를 통해 각각 상황에 맞게 커스텀합니다.
+    var layerParent = new JdPopup('#layer4', {
+        isDimmed: false,
+        isFixed: true,
+        onStart: function() {
+            // 딤드 노출 및 이벤트 설정
+            layerParent.add(document.querySelector('.dimmed'));
+            document.querySelector('.dimmed').addEventListener('click', function(){
+                document.querySelector('.layer-pop.on .btn-close').click();
+            });
+        },
+        offStart: function() {
+            // 딤드 미노출 및 이벤트 설정 해제
+            layerParent.remove(document.querySelector('.dimmed'));
+            document.querySelector('.dimmed').removeEventListener('click', function(){
+                document.querySelector('.layer-pop.on .btn-close').click();
+            });
+        }
+    });
+    var layerChild = new JdPopup('#layer5', {
+        isDimmed: false,
+        isFixed: true,
+        onStart: function() {
+            // 부모 레이어팝업 닫기
+            layerParent.off();
+            // 접근성 처리 추가
+            document.addEventListener('keydown', function(e){
+                if (e.target === document.querySelector('#layer5 .btn-close')) {
+                    if (e.keyCode === 13) {
+                        setTimeout(function () {
+                            document.querySelector('[data-layer-id="layer4"]').focus();
+                        });
+                    }
+                    e.stopPropagation();
+                }
+            });
+        },
+        offStart: function() {
+            // 딤드 미노출 및 이벤트 설정 해제
+            layerChild.remove(document.querySelector('.dimmed'));
+            document.querySelector('.dimmed').removeEventListener('click', function(){
+                document.querySelector('.layer-pop.on .btn-close').click();
+            });
+        }
+    });
+</script>
+</body>
+</html>
