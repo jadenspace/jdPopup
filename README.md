@@ -49,7 +49,7 @@ var layer = new JdPopup('#layer1', {
 
 - 옵션값
 
-|옵션값|내 용|기본값|타 입|
+|속 성|내 용|기본값|타 입|
 |:---|:---|:---|:---|
 |delegateTarget|공통 이벤트 객체 셀렉터|document|document 혹은 CSS selectors|
 |containerEl|레이어팝업 고정 시 노출되는 영역 셀렉터|'.layout'|CSS selectors|

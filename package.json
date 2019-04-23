@@ -1,10 +1,16 @@
 {
   "name": "jd-popup",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Easy-to-custrate layer popup plugin",
-  "main": "./js/jdPopup.js",
+  "main": "./js/jdPopup.module.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "KimYeonho",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jadenspace/jdPopup.git"
   },
   "keywords": [
     "layer",
@@ -16,12 +22,6 @@
     "jd-popup",
     "jdPopup"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jadenspace/jdPopup.git"
-  },
-  "author": "KimYeonho",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/jadenspace/jdPopup/issues",
     "email": "yeonhokr@gmail.com"

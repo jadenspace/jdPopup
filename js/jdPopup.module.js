@@ -1,4 +1,12 @@
-function JdPopup(selector, options) {
+/**
+ * 2019-04-23
+ * 0.1.1 ver
+ * Kim Yeonho
+ * https://github.com/jadenspace/jdPopup/
+ * https://www.npmjs.com/package/jd-popup/
+ */
+
+export function JdPopup(selector, options) {
     this.layerEl = selector;
     this.$layer = document.querySelector(selector);
     this._originOptions = options;
