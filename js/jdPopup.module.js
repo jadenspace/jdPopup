@@ -35,12 +35,15 @@ JdPopup.prototype.initOptions = function (options) {
         responsive: options.responsive || {}
     };
 };
-
 JdPopup.prototype.init = function () {
     this.off();
     this.containerFixed(false);
 };
-
+JdPopup.prototype.cssExtract = function (elem) {
+    var computed = window.getComputedStyle ? window.getComputedStyle(elem, null) : elem.style,
+        duration = computed.transitionDuration || computed.webkitTransitionDuration;
+    return typeof duration === 'string' && duration.length ? parseFloat(duration) : duration;
+};
 JdPopup.prototype.add = function (selector) {
     var check = new RegExp('(\\s|^)' + this._options.setClass + '(\\s|$)');
     if (!selector.className.match(check)) {
